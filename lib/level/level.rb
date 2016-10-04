@@ -53,16 +53,24 @@ class Level
         laser.move!
       end
     end
-    @lasers.reject! {|laser| laser.is_out?}
 
     create_enemy_ships
 
     if @enemy_ships != nil && !@enemy_ships.empty?
       @enemy_ships.each do |enemy|
         enemy.moove!
+        if enemy.was_hit?(@lasers)
+          enemy.destroy!
+          @score.update_points!(enemy.points)
+        elsif enemy.is_out?
+          @lives.lose_life!
+          @window.show_game_over(@score.points) if @lives.game_over?
+        end
       end
     end
 
+    @enemy_ships.reject! {|ship| ship.is_out? || ship.destroyed? }
+    @lasers.reject! {|laser| laser.is_out? || laser.destroyed?}
   end
 
   private

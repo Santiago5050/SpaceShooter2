@@ -3,7 +3,8 @@ require 'csv'
 
 require_relative 'utils'
 require_relative 'menu/main_menu'
-require_relative "level/level"
+require_relative 'level/level'
+require_relative 'level/game_over'
 
 class Game < Gosu::Window
 
@@ -49,6 +50,10 @@ class Game < Gosu::Window
         velocity: row[3].to_i
       }
     end
+  end
+
+  def show_game_over(points)
+    @current_screen = GameOver.new(self, points)
   end
 
 end
